@@ -2,7 +2,7 @@ name: Schedule Test
 
 on:
   schedule:
-    - cron: "*/5 * * * *"   # runs once per hour at 15 minutes past (UTC)
+    - cron: "*/5 * * * *"   # runs once per hour at 5 minutes past (UTC)
   workflow_dispatch:        # allows manual trigger for testing
 
 jobs:
