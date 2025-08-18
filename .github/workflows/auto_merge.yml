@@ -3,7 +3,7 @@ name: auto_merge
 on:
   schedule:
     - cron: "50 * * * *"  # runs every hour at minute 30 UTC
-  - workflow_dispatch: 
+  workflow_dispatch: 
 jobs:
   auto-merge:
     runs-on: windows-latest
