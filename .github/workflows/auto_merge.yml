@@ -53,3 +53,4 @@ jobs:
               } else {
                 console.log(`⚠️ PR #${pr_number} has only ${approvedCount} approvals (<${MIN_APPROVALS}), skipping.`);
               }
+            }
