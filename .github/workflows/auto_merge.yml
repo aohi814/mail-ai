@@ -2,7 +2,7 @@ name: Scheduled Auto Merge by Approval
 
 on:
   schedule:
-    - cron: "15 * * * *"  # runs every hour at minute 0
+    - cron: "20 * * * *"  # runs every hour at minute 0
 
 jobs:
   auto-merge:
