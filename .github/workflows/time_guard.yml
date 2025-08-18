@@ -1,0 +1,20 @@
+name: Time Guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  time-guard:
+    runs-on: windows-latest
+    steps:
+      - name: Check merge window
+        run: |
+          # Current hour in UTC
+          HOUR=$(date -u +"%H")
+          # Allowed merge window: 14:00–15:00 UTC
+          if [ "$HOUR" -ge 14 ] && [ "$HOUR" -lt 15 ]; then
+            echo "✅ Merge window open"
+          else
+            echo "❌ Merge window closed"
+            exit 1
