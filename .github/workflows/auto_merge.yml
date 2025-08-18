@@ -6,7 +6,7 @@ on:
 
 jobs:
   auto-merge:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
