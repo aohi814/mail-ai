@@ -9,14 +9,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check merge window
+        shell: bash
         run: |
-          # Current hour in UTC
           HOUR=$(date -u +"%H")
           MINUTE=$(date -u +"%M")
-          
-          # Allowed merge window: 14:00–15:00 UTC
-          if(( (HOUR == 15 && MINUTE >= 15) && MINUTE < 25 )); then
+          if (( HOUR == 15 && MINUTE >= 25 && MINUTE < 35 )); then
             echo "✅ Merge window open"
           else
             echo "❌ Merge window closed"
             exit 1
+          fi
