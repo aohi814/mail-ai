@@ -13,7 +13,7 @@ jobs:
         run: |
           HOUR=$(date -u +"%H")
           MINUTE=$(date -u +"%M")
-          if (( HOUR == 15 && MINUTE >= 25 && MINUTE < 35 )); then
+          if (( HOUR == 14 && MINUTE >= 25 && MINUTE < 35 )); then
             echo "✅ Merge window open"
           else
             echo "❌ Merge window closed"
