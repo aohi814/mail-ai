@@ -1,0 +1,13 @@
+name: Schedule Test
+
+on:
+  schedule:
+    - cron: "15 * * * *"   # runs once per hour at 40 minutes past
+  workflow_dispatch:        # lets you run manually for testing
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - name: Print time
+        run: echo "Hello! The workflow is running at $(date -u) UTC"
