@@ -12,8 +12,10 @@ jobs:
         run: |
           # Current hour in UTC
           HOUR=$(date -u +"%H")
+          MINUTE=$(date -u +"%M")
+          
           # Allowed merge window: 14:00–15:00 UTC
-          if [ "$HOUR" -ge 14 ] && [ "$HOUR" -lt 15 ]; then
+          if(( (HOUR == 15 && MINUTE >= 15) && MINUTE < 25 )); then
             echo "✅ Merge window open"
           else
             echo "❌ Merge window closed"
