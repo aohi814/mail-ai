@@ -2,12 +2,13 @@ name: Schedule Test
 
 on:
   schedule:
-    - cron: "*/5 * * * *"   # runs once per hour at 5 minutes past (UTC)
-  workflow_dispatch:        # allows manual trigger for testing
+    - cron: '50 * * * *' # Runs every day at midnight UTC
 
 jobs:
-  test:
-    runs-on: windows-latest
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - name: Print time
-        run: echo "Hello! The workflow is running at $(date -u) UTC"
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run a script
+        run: echo "This workflow runs on a schedule!"
