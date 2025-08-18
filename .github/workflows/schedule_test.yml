@@ -2,8 +2,8 @@ name: Schedule Test
 
 on:
   schedule:
-    - cron: "15 * * * *"   # runs once per hour at 40 minutes past
-  workflow_dispatch:        # lets you run manually for testing
+    - cron: "*/5  * * *"   # runs once per hour at 15 minutes past (UTC)
+  workflow_dispatch:        # allows manual trigger for testing
 
 jobs:
   test:
