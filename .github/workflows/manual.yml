@@ -1,0 +1,78 @@
+name: Scheduled Auto Merge
+
+on:
+  workflow_dispatch:   # manual trigger (can be used to trigger scheduled workflow manually)
+  schedule:
+    - cron: "0 14 * * *" # runs at 14:00 UTC daily
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Reject manual workflow_dispatch
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "This workflow can only run on schedule, not manual trigger."
+          exit 1
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get open PRs
+        id: prs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prs = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+            });
+            return prs.data.map(pr => pr.number);
+
+      - name: Merge approved PRs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const MIN_APPROVALS = 2; // set your threshold
+            const prNumbers = ${{ steps.prs.outputs.result }};
+
+            for (const pr_number of prNumbers) {
+              const reviews = await github.rest.pulls.listReviews({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr_number,
+              });
+              const approvedCount = reviews.data.filter(r => r.state === "APPROVED").length;
+
+              if (approvedCount >= MIN_APPROVALS) {
+                await github.rest.pulls.merge({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr_number,
+                  merge_method: "squash",
+                });
+                console.log(`Merged PR #${pr_number} with ${approvedCount} approvals.`);
+              } else {
+                console.log(`PR #${pr_number} has only ${approvedCount} approvals (<${MIN_APPROVALS}), skipping.`);
+              }
+
+      - name: Detect manual merges
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prs = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed',
+              per_page: 20
+            });
+
+            for (const pr of prs.data) {
+              if (pr.merged_at && pr.merge_commit_sha) {
+                if (pr.merged_by.login !== "github-actions[bot]") {
+                  console.error(`ALERT: PR #${pr.number} was manually merged by ${pr.merged_by.login} outside of scheduled workflow.`);
+                }
+              }
+            }
