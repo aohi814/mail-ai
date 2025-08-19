@@ -2,7 +2,7 @@ name: Schedule Test
 
 on:
   schedule:
-    - cron: '*/15 * * * *' # Runs every day at midnight UTC
+    - cron: "15,30,45 * * * *"
 
 jobs:
   build:
